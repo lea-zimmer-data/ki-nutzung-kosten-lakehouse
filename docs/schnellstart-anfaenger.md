@@ -104,6 +104,7 @@ Die Dateien selbst findest du links unter **Catalog → ki_nutzung → bronze �
 |---|---|
 | Fehler, dass `/Volumes/ki_nutzung/bronze/rohdaten` nicht existiert | Teil 4 wurde noch nicht ausgeführt. Hole das nach und starte das Notebook dann noch einmal. |
 | `No module named 'generate_data'` | Im Git-Ordner fehlt der Ordner `scripts`. Klicke oben auf den Knopf **main** und dann auf **Pull**, um den aktuellen Stand zu holen. |
+| `unrecognized arguments: -f …` und `SystemExit: 2` | Du hast `scripts/generate_data.py` direkt gestartet. Das ist ein Hilfsprogramm, das nur über das Notebook läuft. Starte stattdessen `setup/01_daten_erzeugen`. |
 | Ein Kreuz ✗ statt Häkchen bei Schritt 2 | Notebook noch einmal komplett ausführen. Bleibt das Kreuz, ein Issue im Repo anlegen. |
 
 ---
