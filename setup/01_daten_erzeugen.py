@@ -34,7 +34,16 @@ def repo_ordner() -> Path:
 
 
 sys.path.insert(0, str(repo_ordner() / "scripts"))
+import importlib  # noqa: E402
 import generate_data  # noqa: E402
+
+# Immer den aktuellen Stand der Datei laden, auch nach einem Pull
+generate_data = importlib.reload(generate_data)
+if not hasattr(generate_data, "main"):
+    raise RuntimeError(
+        "scripts/generate_data.py ist leer oder unvollständig. "
+        "Bitte im Git-Ordner oben auf main und dann auf Pull klicken."
+    )
 
 generate_data.main(STARTWERT, ZIEL)
 
