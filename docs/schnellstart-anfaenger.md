@@ -3,7 +3,7 @@
 Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswirtinnen, Controller, Assistenten der Geschäftsführung, Fachbereiche. Stell dir vor, dein Chef fragt: *„Was kostet uns eigentlich die KI, und können wir den Zahlen trauen?“* Mit dieser Anleitung baust du die Antwort selbst nach, Schritt für Schritt und komplett im Browser.
 
 **Was du brauchst:** einen Browser und eine E-Mail-Adresse. Du installierst nichts auf deinem Rechner.
-**Zeitbedarf bis zum Ende von Teil 4:** etwa 15 Minuten.
+**Zeitbedarf bis zum Ende von Teil 5:** etwa 20 Minuten.
 
 > **Wichtig:** Das Projekt arbeitet mit **erfundenen Beispieldaten**. Damit kannst du gefahrlos üben. Die Databricks Free Edition ist zum Lernen gedacht und darf nicht für kommerzielle Zwecke genutzt werden. Bevor du echte Unternehmensdaten verwendest, sprich mit deiner IT und dem Datenschutz.
 
@@ -52,7 +52,7 @@ Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswir
 5. Lass das Häkchen bei **Sparse checkout mode** weg.
 6. Klicke auf **Create Git folder**.
 
-**Das solltest du sehen:** einen Ordner `ki-nutzung-kosten-lakehouse` mit den Unterordnern `docs` und `setup` sowie den Dateien `README.md` und `LICENSE`.
+**Das solltest du sehen:** einen Ordner `ki-nutzung-kosten-lakehouse` mit den Unterordnern `docs`, `scripts` und `setup` sowie den Dateien `README.md` und `LICENSE`.
 
 ---
 
@@ -79,4 +79,33 @@ In diesem Schritt legst du den Katalog `ki_nutzung`, die Schemas für die drei S
 
 ---
 
-*Weitere Teile folgen: Beispieldaten erzeugen, Pipeline mit Prüfregeln, Abgleich mit dem Snowflake-Projekt, Genie Agent und KI-Agent.*
+## Teil 5: Die Beispieldaten erzeugen (ca. 5 Minuten)
+
+Jetzt entstehen die erfundenen Daten: Abteilungen, KI-Modelle, Mitarbeitende, KI-Anwendungsfälle und rund 56.000 KI-Anfragen aus einem Jahr. Darin sind vier Datenfehler bewusst eingebaut, damit du später siehst, wie die Prüfregeln sie finden.
+
+1. Öffne im Git-Ordner den Unterordner **setup** und klicke auf **01_daten_erzeugen**. Das ist ein *Notebook*: eine Datei, in der sich Erklärungen und ausführbare Abschnitte abwechseln.
+2. Prüfe oben rechts, ob bei der Rechenleistung **Serverless** steht.
+3. Klicke oben auf **Run all**.
+4. Warte, bis alle Abschnitte durchgelaufen sind. Unter jedem Abschnitt erscheint dann sein Ergebnis.
+
+**Das solltest du sehen:**
+
+- Unter Schritt 1 die Zeile `users=220 use_cases=15 events=55861 -> /Volumes/ki_nutzung/bronze/rohdaten`.
+- Unter Schritt 2 fünf Zeilen mit einem Häkchen ✓ und darunter: *Alles in Ordnung: gleiche Zeilenzahlen wie im Snowflake-Projekt.*
+- Unter Schritt 3 eine Tabelle mit den ersten zehn KI-Anfragen.
+
+Die Dateien selbst findest du links unter **Catalog → ki_nutzung → bronze → Volumes → rohdaten**.
+
+> **Gut zu wissen:** Der Generator `scripts/generate_data.py` ist unverändert aus dem Snowflake-Projekt [ki-nutzung-kosten-analytics](https://github.com/lea-zimmer-data/ki-nutzung-kosten-analytics) übernommen. Mit dem Startwert 42 entstehen bei jedem Lauf genau dieselben Daten. Deshalb kann man die Ergebnisse beider Projekte später direkt vergleichen.
+
+### Falls etwas nicht klappt
+
+| Meldung oder Problem | Lösung |
+|---|---|
+| Fehler, dass `/Volumes/ki_nutzung/bronze/rohdaten` nicht existiert | Teil 4 wurde noch nicht ausgeführt. Hole das nach und starte das Notebook dann noch einmal. |
+| `No module named 'generate_data'` | Im Git-Ordner fehlt der Ordner `scripts`. Klicke oben auf den Knopf **main** und dann auf **Pull**, um den aktuellen Stand zu holen. |
+| Ein Kreuz ✗ statt Häkchen bei Schritt 2 | Notebook noch einmal komplett ausführen. Bleibt das Kreuz, ein Issue im Repo anlegen. |
+
+---
+
+*Weitere Teile folgen: Pipeline mit Prüfregeln, Abgleich mit dem Snowflake-Projekt, Genie Agent und KI-Agent.*
