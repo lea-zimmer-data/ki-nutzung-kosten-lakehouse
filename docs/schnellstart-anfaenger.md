@@ -60,13 +60,14 @@ Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswir
 
 In diesem Schritt legst du den Katalog `ki_nutzung`, die Schemas für die drei Stufen und die Ablage für die Beispieldaten an. Alles steckt in einer einzigen Datei.
 
-1. Öffne im Git-Ordner den Unterordner **setup** und klicke auf die Datei **00_einrichtung.sql**.
-2. Führe die Datei komplett aus:
-   - Wenn sich die Datei im SQL-Editor öffnet, wähle oben die Rechenleistung (**Serverless Starter Warehouse** oder ähnlich) und klicke auf **Run all**.
-   - Wenn du nur Text siehst, markiere alles (Strg + A), kopiere es (Strg + C), öffne links **SQL Editor**, füge den Text ein (Strg + V) und klicke auf **Run all**.
-3. Warte, bis unten ein Ergebnis erscheint. Das kann beim ersten Mal eine Minute dauern, weil die Rechenleistung erst startet.
+1. Öffne im Git-Ordner den Unterordner **setup** und klicke auf die Datei **00_einrichtung.sql**. Sie öffnet sich in einem Editor.
+2. Oben rechts steht bei der Rechenleistung **Serverless**. Das passt, du musst nichts ändern.
+3. Klicke ganz oben links auf den kleinen **Pfeil neben ▶** und wähle **Run all**. Gibt es den Eintrag nicht, klicke direkt auf **▶**.
+4. Warte, bis unten ein Ergebnis erscheint. Das kann beim ersten Mal eine Minute dauern, weil die Rechenleistung erst startet.
 
-**Das solltest du sehen:** eine Liste mit den Schemas `agent`, `bronze`, `default`, `gold`, `information_schema` und `silver`. Wenn du links auf **Catalog** klickst, findest du den Katalog `ki_nutzung`. Unter `bronze` liegt die Ablage `rohdaten`.
+**Das solltest du sehen:** eine Tabelle mit sechs Schemas: `agent`, `bronze`, `default`, `gold`, `information_schema` und `silver`. Wenn du links auf **Catalog** klickst, findest du den Katalog `ki_nutzung`. Unter `bronze` liegt die Ablage `rohdaten`.
+
+> **Was sind `default` und `information_schema`?** Beide legt Databricks in jedem neuen Katalog automatisch an. `default` ist ein leeres Ersatzfach, falls jemand beim Anlegen einer Tabelle kein Schema angibt. `information_schema` enthält nur Beschreibungen, zum Beispiel welche Tabellen es gibt. Dieses Projekt nutzt keins von beiden, du kannst sie ignorieren.
 
 ### Falls etwas nicht klappt
 
