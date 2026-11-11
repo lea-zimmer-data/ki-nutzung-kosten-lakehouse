@@ -53,7 +53,9 @@ Was das praktisch bedeutet, zeigt die Kostenauswertung: Die Kosten der fünf Nut
 
 Dieselben Daten und dieselben fünf Fragen habe ich zuvor mit Snowflake und dbt umgesetzt: [ki-nutzung-kosten-analytics](https://github.com/lea-zimmer-data/ki-nutzung-kosten-analytics). Der Datengenerator ist in beiden Projekten dieselbe Datei, die Tabellen heißen gleich, die Rechenregeln sind dieselben.
 
-Der Gedanke dahinter: Die Plattform ist austauschbar. Was bleibt, sind die Fachfragen, die Rechenregeln und die Entscheidung, wie man mit Fehlern umgeht. Ein direkter Vergleich der Ergebnisse beider Plattformen folgt.
+Ich habe beide Ergebnisse nebeneinandergelegt: **21 Kennzahlen über alle sieben Auswertungen, auf beiden Plattformen exakt dieselben Werte.** Die Abfragen und alle Zahlen stehen im [Vergleich Snowflake und Databricks](docs/vergleich-snowflake-databricks.md).
+
+Der Gedanke dahinter: Die Plattform ist austauschbar. Was bleibt, sind die Fachfragen, die Rechenregeln und die Entscheidung, wie man mit Fehlern umgeht.
 
 ## Selbst ausprobieren
 
@@ -76,7 +78,7 @@ Wer sich auskennt, braucht nur diese Schritte:
 | Beispieldaten und Einrichtung | ✅ fertig |
 | Pipeline Bronze → Silver → Gold mit Prüfregeln | ✅ fertig |
 | Anleitung für Einsteiger | ✅ fertig, wächst mit |
-| Vergleich der Ergebnisse mit dem Snowflake-Projekt | in Arbeit |
+| Vergleich der Ergebnisse mit dem Snowflake-Projekt | ✅ fertig, 21 von 21 Kennzahlen gleich |
 | Genie Agent: Fragen in normaler Sprache | geplant |
 | KI-Agent, der zu jeder Zahl die Datenqualität nennt | geplant |
 
@@ -95,9 +97,12 @@ Wer sich auskennt, braucht nur diese Schritte:
 ├── auswertungen/
 │   ├── kosten_je_abteilung.sql         # Frage 1
 │   ├── datenqualitaet.sql              # Frage 5
-│   └── pruefregeln_der_pipeline.sql    # Gegenprobe aus dem Protokoll der Pipeline
+│   ├── pruefregeln_der_pipeline.sql    # Gegenprobe aus dem Protokoll der Pipeline
+│   ├── abgleich_databricks.sql         # 21 Kennzahlen für den Vergleich
+│   └── abgleich_snowflake.sql          # dieselbe Abfrage für Snowflake
 └── docs/
-    └── schnellstart-anfaenger.md       # Schritt-für-Schritt-Anleitung
+    ├── schnellstart-anfaenger.md       # Schritt-für-Schritt-Anleitung
+    └── vergleich-snowflake-databricks.md   # Ergebnisse beider Plattformen nebeneinander
 ```
 
 ## Entstehung
@@ -118,7 +123,7 @@ Das ist für mich der eigentliche Punkt: Code entsteht heute schnell. Die Arbeit
 
 Ich bin **Lea Zimmer**. Seit über zehn Jahren arbeite ich mit Daten, in BI, Datenmanagement und Data Governance. Mein Schwerpunkt: BI-Teams modernisieren und Fachbereiche so befähigen, dass sie ihre Daten verstehen und selbst damit arbeiten können.
 
-Steht ihr vor ähnlichen Fragen, etwa Datenqualität vor dem KI-Einsatz, ein BI-Team im Umbruch oder Fachbereiche, die selbst auswerten sollen? Dann schreibt mir gern: (https://www.linkedin.com/in/leazimmer/)
+Steht ihr vor ähnlichen Fragen, etwa Datenqualität vor dem KI-Einsatz, ein BI-Team im Umbruch oder Fachbereiche, die selbst auswerten sollen? Dann schreibt mir gern: [LinkedIn](https://www.linkedin.com/in/leazimmer/)
 
 ## Lizenz
 
