@@ -118,7 +118,7 @@ Das ist für mich der eigentliche Punkt: Code entsteht heute schnell. Die Arbeit
 
 Ich bin **Lea Zimmer**. Seit über zehn Jahren arbeite ich mit Daten, in BI, Datenmanagement und Data Governance. Mein Schwerpunkt: BI-Teams modernisieren und Fachbereiche so befähigen, dass sie ihre Daten verstehen und selbst damit arbeiten können.
 
-Steht ihr vor ähnlichen Fragen, etwa Datenqualität vor dem KI-Einsatz, ein BI-Team im Umbruch oder Fachbereiche, die selbst auswerten sollen? Dann schreibt mir gern: [GitHub-Profil](https://github.com/lea-zimmer-data).
+Steht ihr vor ähnlichen Fragen, etwa Datenqualität vor dem KI-Einsatz, ein BI-Team im Umbruch oder Fachbereiche, die selbst auswerten sollen? Dann schreibt mir gern: (https://www.linkedin.com/in/leazimmer/)
 
 ## Lizenz
 
