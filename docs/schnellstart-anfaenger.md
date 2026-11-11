@@ -2,32 +2,25 @@
 
 Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswirtinnen, Controller, Assistenten der Geschäftsführung, Fachbereiche. Stell dir vor, dein Chef fragt: *„Was kostet uns eigentlich die KI, und können wir den Zahlen trauen?“* Mit dieser Anleitung baust du die Antwort selbst nach, Schritt für Schritt und komplett im Browser.
 
-**Was du brauchst:** einen Browser und eine E-Mail-Adresse. Du installierst nichts auf deinem Rechner.
-**Zeitbedarf bis zum Ende von Teil 6:** etwa 40 Minuten.
+**Was du brauchst:** einen Browser und eine E-Mail-Adresse. Du installierst nichts auf deinem Rechner, und es kostet nichts.
+**Zeitbedarf:** beim ersten Mal etwa 45 bis 60 Minuten. Du kannst nach jedem Teil aufhören und später weitermachen.
 
 > **Wichtig:** Das Projekt arbeitet mit **erfundenen Beispieldaten**. Damit kannst du gefahrlos üben. Die Databricks Free Edition ist zum Lernen gedacht und darf nicht für kommerzielle Zwecke genutzt werden. Bevor du echte Unternehmensdaten verwendest, sprich mit deiner IT und dem Datenschutz.
 
-> **Stand:** Das Projekt ist im Aufbau. Diese Anleitung wächst mit jedem Schritt. Weitere Teile folgen.
-
 ---
 
-## Teil 1: Die wichtigsten Begriffe (3 Minuten)
+## Teil 1: Was du am Ende hast (2 Minuten)
 
-| Begriff | Einfach erklärt |
-|---|---|
-| **Repository (Repo)** | Ein Projektordner im Internet, in dem alle Dateien und alle Änderungen gespeichert sind. |
-| **GitHub** | Die Webseite, auf der dieses Repo liegt. |
-| **Databricks** | Eine Datenplattform in der Cloud. Dort werden die Daten gespeichert, geprüft und ausgewertet, und dort läuft auch der KI-Agent. |
-| **Free Edition** | Die kostenlose Lernversion von Databricks. Sie hat Grenzen bei der Rechenleistung, reicht für dieses Projekt aber aus. |
-| **Workspace** | Deine persönliche Arbeitsumgebung in Databricks. |
-| **Git-Ordner** | Eine Kopie dieses Repos in deinem Workspace. So hast du alle Dateien direkt in Databricks. |
-| **Katalog, Schema, Tabelle** | Die Ordnung der Daten, wie Aktenschrank, Schublade und Akte. Der Katalog dieses Projekts heißt `ki_nutzung`. |
-| **Volume (Ablage)** | Ein Ordner in Databricks für Dateien, hier für die CSV-Dateien mit den Beispieldaten. |
-| **SQL** | Die Sprache, mit der man Datenbanken Fragen stellt. Du musst sie nicht lernen. Du führst die fertigen Dateien aus diesem Repo nur aus. |
-| **Bronze, Silver, Gold** | Die drei Stufen, die die Daten durchlaufen: roh eingelesen (Bronze), geprüft und sauber (Silver), fertig ausgewertet (Gold). |
-| **Pipeline** | Eine Abfolge von Schritten, die Daten automatisch von den Rohdaten bis zur fertigen Auswertung bringt. Du startest sie mit einem Klick. |
-| **Prüfregel** | Eine Regel, die bei jedem Lauf kontrolliert, ob die Daten stimmen, zum Beispiel „Jede Ereignisnummer kommt nur einmal vor“. Verstöße werden gemeldet, nicht still repariert. |
-| **KI-Agent** | Ein Programm, das Fragen in normaler Sprache versteht, sich die Antwort aus den Gold-Tabellen holt und dazusagt, wie verlässlich die Daten sind. |
+Nach dieser Anleitung läuft in deinem eigenen Databricks-Konto eine vollständige Datenstrecke:
+
+- **Rund 56.000 KI-Anfragen** eines erfundenen Unternehmens aus einem Jahr, mit Abteilungen, Nutzern, Anwendungsfällen und Preisen.
+- **Eine Pipeline**, die diese Daten mit einem Klick einliest, prüft und auswertet.
+- **Eine Antwort auf die Frage deines Chefs:** eine Tabelle mit den KI-Kosten je Abteilung.
+- **Eine ehrliche Qualitätsübersicht:** In den Daten stecken vier absichtlich eingebaute Fehler. Die Pipeline findet alle vier und zeigt mit einer Ampel, wie schwer sie wiegen und wer sich darum kümmern sollte.
+
+Du schreibst dabei keine einzige Zeile Code. Du klickst, führst fertige Dateien aus und vergleichst das Ergebnis mit dem, was hier unter **„Das solltest du sehen“** steht.
+
+Unbekannte Wörter wie *Katalog*, *Pipeline* oder *Prüfregel* sind am Ende unter [Begriffe zum Nachschlagen](#begriffe-zum-nachschlagen) erklärt.
 
 ---
 
@@ -197,4 +190,55 @@ Zu jeder Zeile stehen rechts daneben eine Erklärung, eine Empfehlung und wer zu
 
 ---
 
-*Weitere Teile folgen: Abgleich mit dem Snowflake-Projekt, Genie Agent und KI-Agent.*
+## Teil 7: Die erste Antwort (ca. 3 Minuten)
+
+Jetzt beantwortest du die Frage vom Anfang: Was kostet uns die KI?
+
+1. Öffne im Git-Ordner den Unterordner **auswertungen** und klicke auf **kosten_je_abteilung.sql**.
+2. Klicke auf **Run all**.
+
+**Das solltest du sehen:** die KI-Kosten je Abteilung im Dezember 2025, die teuerste Abteilung zuerst.
+
+| event_monat | abteilung | erfolgreiche_anfragen | kosten_eur |
+|---|---|---|---|
+| 2025-12-01 | Kundenservice | 1945 | 9.65 |
+| 2025-12-01 | Produktentwicklung | 1215 | 6.41 |
+| 2025-12-01 | Vertrieb | 1133 | 5.58 |
+| 2025-12-01 | IT | 981 | 5.32 |
+| 2025-12-01 | Marketing | 812 | 4.49 |
+| 2025-12-01 | Personal | 509 | 2.34 |
+| 2025-12-01 | Finanzen | 372 | 2.17 |
+| 2025-12-01 | Recht und Compliance | 328 | 1.74 |
+| 2025-12-01 | Unbekannt | 213 | 1.12 |
+
+Die Beträge sind klein, weil Preise und Mengen erfunden sind. Es geht um den Weg zur Zahl, nicht um die Zahl selbst.
+
+**Und kannst du den Zahlen trauen?** Schau auf die letzte Zeile: 213 Anfragen laufen unter „Unbekannt“. Das sind die Nutzer mit unbekannter Abteilung aus der Qualitätsübersicht in Teil 6. Die Kosten fehlen also nicht, sie sind nur keiner Abteilung zugeordnet. Genau dafür ist die Qualitätsübersicht da: Sie sagt dir, wo eine Zahl mit Vorsicht zu lesen ist und wer das Problem beheben kann.
+
+---
+
+## Wie geht es weiter?
+
+- **Eigene Fragen stellen:** Unter **Catalog → ki_nutzung → gold** findest du alle fertigen Auswertungen. Klicke eine Tabelle an und dann auf **Sample data**, um hineinzuschauen.
+- **Was noch kommt:** ein Genie Agent, dem du Fragen in normaler Sprache stellst, und ein KI-Agent, der bei jeder Antwort die Datenqualität dazusagt. Die Anleitung wird dann erweitert.
+- **Fragen oder Anregungen?** Lege ein Issue im Repo an oder schreib mir. Den Kontakt findest du im [README](../README.md).
+
+---
+
+## Begriffe zum Nachschlagen
+
+| Begriff | Einfach erklärt |
+|---|---|
+| **Repository (Repo)** | Ein Projektordner im Internet, in dem alle Dateien und alle Änderungen gespeichert sind. |
+| **GitHub** | Die Webseite, auf der dieses Repo liegt. |
+| **Databricks** | Eine Datenplattform in der Cloud. Dort werden die Daten gespeichert, geprüft und ausgewertet, und dort läuft auch der KI-Agent. |
+| **Free Edition** | Die kostenlose Lernversion von Databricks. Sie hat Grenzen bei der Rechenleistung, reicht für dieses Projekt aber aus. |
+| **Workspace** | Deine persönliche Arbeitsumgebung in Databricks. |
+| **Git-Ordner** | Eine Kopie dieses Repos in deinem Workspace. So hast du alle Dateien direkt in Databricks. |
+| **Katalog, Schema, Tabelle** | Die Ordnung der Daten, wie Aktenschrank, Schublade und Akte. Der Katalog dieses Projekts heißt `ki_nutzung`. |
+| **Volume (Ablage)** | Ein Ordner in Databricks für Dateien, hier für die CSV-Dateien mit den Beispieldaten. |
+| **SQL** | Die Sprache, mit der man Datenbanken Fragen stellt. Du musst sie nicht lernen. Du führst die fertigen Dateien aus diesem Repo nur aus. |
+| **Bronze, Silver, Gold** | Die drei Stufen, die die Daten durchlaufen: roh eingelesen (Bronze), geprüft und sauber (Silver), fertig ausgewertet (Gold). |
+| **Pipeline** | Eine Abfolge von Schritten, die Daten automatisch von den Rohdaten bis zur fertigen Auswertung bringt. Du startest sie mit einem Klick. |
+| **Prüfregel** | Eine Regel, die bei jedem Lauf kontrolliert, ob die Daten stimmen, zum Beispiel „Jede Ereignisnummer kommt nur einmal vor“. Verstöße werden gemeldet, nicht still repariert. |
+| **KI-Agent** | Ein Programm, das Fragen in normaler Sprache versteht, sich die Antwort aus den Gold-Tabellen holt und dazusagt, wie verlässlich die Daten sind. |
