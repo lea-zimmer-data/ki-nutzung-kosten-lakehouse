@@ -3,7 +3,7 @@
 Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswirtinnen, Controller, Assistenten der Geschäftsführung, Fachbereiche. Stell dir vor, dein Chef fragt: *„Was kostet uns eigentlich die KI, und können wir den Zahlen trauen?“* Mit dieser Anleitung baust du die Antwort selbst nach, Schritt für Schritt und komplett im Browser.
 
 **Was du brauchst:** einen Browser und eine E-Mail-Adresse. Du installierst nichts auf deinem Rechner.
-**Zeitbedarf bis zum Ende von Teil 5:** etwa 20 Minuten.
+**Zeitbedarf bis zum Ende von Teil 6:** etwa 40 Minuten.
 
 > **Wichtig:** Das Projekt arbeitet mit **erfundenen Beispieldaten**. Damit kannst du gefahrlos üben. Die Databricks Free Edition ist zum Lernen gedacht und darf nicht für kommerzielle Zwecke genutzt werden. Bevor du echte Unternehmensdaten verwendest, sprich mit deiner IT und dem Datenschutz.
 
@@ -25,6 +25,7 @@ Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswir
 | **Volume (Ablage)** | Ein Ordner in Databricks für Dateien, hier für die CSV-Dateien mit den Beispieldaten. |
 | **SQL** | Die Sprache, mit der man Datenbanken Fragen stellt. Du musst sie nicht lernen. Du führst die fertigen Dateien aus diesem Repo nur aus. |
 | **Bronze, Silver, Gold** | Die drei Stufen, die die Daten durchlaufen: roh eingelesen (Bronze), geprüft und sauber (Silver), fertig ausgewertet (Gold). |
+| **Pipeline** | Eine Abfolge von Schritten, die Daten automatisch von den Rohdaten bis zur fertigen Auswertung bringt. Du startest sie mit einem Klick. |
 | **Prüfregel** | Eine Regel, die bei jedem Lauf kontrolliert, ob die Daten stimmen, zum Beispiel „Jede Ereignisnummer kommt nur einmal vor“. Verstöße werden gemeldet, nicht still repariert. |
 | **KI-Agent** | Ein Programm, das Fragen in normaler Sprache versteht, sich die Antwort aus den Gold-Tabellen holt und dazusagt, wie verlässlich die Daten sind. |
 
@@ -52,7 +53,7 @@ Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswir
 5. Lass das Häkchen bei **Sparse checkout mode** weg.
 6. Klicke auf **Create Git folder**.
 
-**Das solltest du sehen:** einen Ordner `ki-nutzung-kosten-lakehouse` mit den Unterordnern `docs`, `scripts` und `setup` sowie den Dateien `README.md` und `LICENSE`.
+**Das solltest du sehen:** einen Ordner `ki-nutzung-kosten-lakehouse` mit den Unterordnern `auswertungen`, `docs`, `pipeline`, `scripts` und `setup` sowie den Dateien `README.md` und `LICENSE`.
 
 ---
 
@@ -109,4 +110,91 @@ Die Dateien selbst findest du links unter **Catalog → ki_nutzung → bronze �
 
 ---
 
-*Weitere Teile folgen: Pipeline mit Prüfregeln, Abgleich mit dem Snowflake-Projekt, Genie Agent und KI-Agent.*
+## Teil 6: Die Pipeline anlegen und starten (ca. 20 Minuten)
+
+Jetzt kommt das Herzstück. Die Pipeline liest die Rohdaten ein (Bronze), macht daraus saubere Daten mit Prüfregeln (Silver) und baut die fertigen Auswertungen (Gold). Der Code dafür liegt schon im Ordner `pipeline`. Du musst Databricks nur sagen, wo er liegt.
+
+### Schritt 1: Pipeline anlegen
+
+1. Klicke links im Menü auf **Jobs & Pipelines**.
+2. Klicke oben rechts auf **Create** und wähle **ETL pipeline**.
+
+Databricks legt sofort eine neue Pipeline an. Sie heißt „New Pipeline“ mit Datum und Uhrzeit und enthält nur eine leere Beispieldatei. **Klicke noch nicht auf „Run pipeline“.**
+
+> **Wichtig:** Klicke nur einmal auf **ETL pipeline**. Jeder Klick legt eine weitere Pipeline an.
+
+### Schritt 2: Pipeline einstellen
+
+Klicke oben in der Leiste auf das **Zahnrad**. Es öffnen sich die **Pipeline settings**. Ändere dort drei Dinge:
+
+**Name**
+Klicke auf den Stift neben **Pipeline name** und trage `ki_nutzung_pipeline` ein.
+
+**Katalog und Schema**
+Klicke auf **Edit catalog and schema**. Wähle als Katalog `ki_nutzung` und als Schema `gold`. Speichern.
+
+**Quellcode**
+Klicke auf **Configure paths**. Du siehst zwei Felder. Klicke jeweils auf das **Ordner-Symbol** rechts daneben und wähle den Ordner aus:
+
+| Feld | Diesen Ordner wählen |
+|---|---|
+| **Pipeline root folder** | `ki-nutzung-kosten-lakehouse` |
+| **Source code paths** | `ki-nutzung-kosten-lakehouse` → `pipeline` |
+
+So findest du die Ordner im Auswahlfenster: Klicke oben in der Pfadzeile auf deinen **Benutzerordner** (der Eintrag mit deiner E-Mail-Adresse). Dort liegt `ki-nutzung-kosten-lakehouse`, erkennbar am Git-Symbol und an den **Bindestrichen** im Namen.
+
+> **Achtung, Verwechslungsgefahr:** Im selben Benutzerordner liegt auch ein Ordner `ki_nutzung_pipeline` mit **Unterstrichen**. Den hat Databricks automatisch angelegt, er enthält nur die leere Beispieldatei. Wähle ihn nicht aus. Ausgewählt wird immer der Ordner, der in der Pfadzeile ganz rechts steht. Prüfe das, bevor du auf **Select** klickst.
+
+**Das solltest du sehen:** In den Pipeline settings steht unter **Code assets** bei **Root folder** ein Pfad, der auf `ki-nutzung-kosten-lakehouse` endet, und bei **Source code** steht `pipeline/`. Unter **Default location for data assets** stehen `ki_nutzung` und `gold`. Bei **Compute** steht **Serverless**.
+
+### Schritt 3: Pipeline starten
+
+1. Schließe die Einstellungen mit dem **X**.
+2. Schließe den Tab mit der leeren Beispieldatei (Endung `.py`) über das **X** neben dem Dateinamen.
+3. Klicke ganz links oben auf das **Ordner-Symbol** und dann im Dateibaum auf **01_bronze.sql**.
+4. Klicke oben rechts auf den blauen Knopf **Run pipeline**.
+
+Der erste Lauf dauert ein paar Minuten. Unten erscheinen die Reiter **Tables**, **Performance** und **Pipeline graph**.
+
+**Das solltest du sehen:**
+
+- Unter **Tables** eine Liste mit 17 Tabellen, jede mit einem grünen Häkchen. Oben rechts in diesem Bereich stehen 0 Fehler und 0 Warnungen.
+- Unter **Pipeline graph** eine Grafik, die zeigt, wie die Daten von den Rohdaten bis zu den Auswertungen fließen.
+- Links unter **Catalog → ki_nutzung** sind die Schemas `bronze`, `silver` und `gold` jetzt mit Tabellen gefüllt.
+
+### Schritt 4: Ergebnis prüfen
+
+Die Pipeline hat vier Datenfehler gefunden und gemeldet, ohne sie still zu reparieren. So siehst du sie:
+
+1. Öffne im Git-Ordner den Unterordner **auswertungen** und klicke auf **datenqualitaet.sql**.
+2. Klicke auf **Run all** (über den kleinen Pfeil neben ▶).
+
+**Das solltest du sehen:**
+
+| pruefung | betroffene_zeilen | geprueft | anteil_prozent | ampel |
+|---|---|---|---|---|
+| Doppelte Ereignisse | 139 | 55861 | 0.25 | gelb |
+| Ereignisse ohne Anwendungsfall | 1102 | 55722 | 1.98 | rot |
+| Nutzer mit unbekannter Abteilung | 5 | 220 | 2.27 | rot |
+| Nutzung nach dem Austritt | 174 | 55722 | 0.31 | gelb |
+
+Zu jeder Zeile stehen rechts daneben eine Erklärung, eine Empfehlung und wer zuständig ist.
+
+**Gegenprobe:** Führe genauso **pruefregeln_der_pipeline.sql** aus. Diese Abfrage liest das Protokoll der Pipeline. Bei den vier Prüfregeln `event_id_eindeutig`, `anwendungsfall_zugeordnet`, `nutzung_vor_austritt` und `abteilung_bekannt` müssen dieselben vier Zahlen stehen: 139, 1102, 174 und 5. Alle anderen Regeln zeigen 0 Verstöße.
+
+> **Warum zwei Wege?** Die erste Abfrage rechnet aus den Tabellen, die zweite liest, was die Pipeline beim Lauf mitgezählt hat. Stimmen beide überein, kannst du den Zahlen trauen.
+
+### Falls etwas nicht klappt
+
+| Meldung oder Problem | Lösung |
+|---|---|
+| Unten steht nur **Output / Terminal / Debugger** statt **Tables / Pipeline graph** | Du hast noch die leere Beispieldatei geöffnet. Schließe ihren Tab und öffne `01_bronze.sql` aus dem Dateibaum. |
+| Die Pipeline läuft durch, aber es entstehen keine Tabellen | Bei **Source code** ist der falsche Ordner eingetragen. Öffne das Zahnrad, klicke auf **Configure paths** und wähle `ki-nutzung-kosten-lakehouse` → `pipeline`. |
+| Fehler in `00_einrichtung.sql` oder `01_daten_erzeugen` während des Laufs | Bei **Source code** ist der ganze Git-Ordner eingetragen statt nur `pipeline`. Korrigiere das wie in der Zeile darüber. |
+| Fehler, dass eine Datei unter `/Volumes/ki_nutzung/bronze/rohdaten` fehlt | Teil 5 wurde noch nicht ausgeführt. |
+| Es gibt mehrere Pipelines in der Liste | Lösche die überzähligen: **Jobs & Pipelines**, bei der Pipeline mit dem Namen „New Pipeline …“ auf die **drei Punkte** klicken und **Delete** wählen. Die Free Edition erlaubt nur eine aktive Pipeline dieser Art. |
+| Fehler wegen eines Tageslimits | Die Free Edition hat ein Tageskontingent. Versuche es am nächsten Tag noch einmal. Deine Daten bleiben erhalten. |
+
+---
+
+*Weitere Teile folgen: Abgleich mit dem Snowflake-Projekt, Genie Agent und KI-Agent.*
