@@ -10,15 +10,6 @@ Das Beispiel: Ein Unternehmen will wissen, **was KI kostet, wer sie nutzt und ob
 
 *Dieses Dashboard hat ein KI-Assistent in Databricks aus zwei Anweisungen in normaler Sprache gebaut. Die Anweisungen stehen im Wortlaut in [docs/prompts.md](docs/prompts.md). Alle Daten sind erfunden.*
 
-```mermaid
-flowchart LR
-    A[CSV-Dateien<br/>56.000 KI-Anfragen] --> B[Bronze<br/>unverändert eingelesen]
-    B --> C[Silver<br/>saubere Datentypen<br/>+ Prüfregeln]
-    C --> D[Gold<br/>fertige Auswertungen<br/>+ Qualitätsübersicht]
-    D --> E[Fachbereich<br/>fragt per SQL]
-    D -.-> F[KI-Agent<br/>in Arbeit]
-```
-
 ## Was die Pipeline findet
 
 In den Beispieldaten stecken vier absichtlich eingebaute Fehler. Die Pipeline findet alle vier:
@@ -42,6 +33,19 @@ Viele Datenstrecken sortieren fehlerhafte Zeilen einfach aus. Die Zahlen sehen d
 Keine Regel entfernt Zeilen stillschweigend. Insgesamt prüfen 13 Regeln die Daten bei jedem Lauf, 4 melden und 9 stoppen.
 
 Was das praktisch bedeutet, zeigt die Kostenauswertung: Die Kosten der fünf Nutzer ohne bekannte Abteilung verschwinden nicht, sie erscheinen unter „Unbekannt“. Die Summe stimmt, und die Qualitätsübersicht sagt, wer die Zuordnung nachpflegen kann.
+
+## So fließen die Daten
+
+```mermaid
+flowchart LR
+    A[CSV-Dateien<br/>56.000 KI-Anfragen] --> B[Bronze<br/>unverändert eingelesen]
+    B --> C[Silver<br/>Datentypen<br/>+ 13 Prüfregeln]
+    C --> D[Gold<br/>7 fertige Auswertungen]
+    D --> E[Dashboard<br/>vom KI-Assistenten gebaut]
+    D -.-> F[Genie und KI-Agent<br/>geplant]
+```
+
+Jede Stufe hat eine Aufgabe: Bronze bewahrt, was geliefert wurde. Silver prüft. Gold rechnet. Erst auf geprüften Daten setzen Dashboard und KI-Agent auf.
 
 ## Fünf Fachfragen
 
