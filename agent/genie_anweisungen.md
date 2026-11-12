@@ -6,16 +6,19 @@ Diese Datei enthält alles, was beim Einrichten eingetragen wird, und die Testfr
 
 ---
 
-## 1. Name und Beschreibung
+## 1. Agent per Beschreibung anlegen
 
-| Feld | Inhalt |
-|---|---|
-| Name | KI-Kosten fragen |
-| Beschreibung | Fragen zu KI-Kosten, KI-Nutzung, Freigaben und Datenqualität. Beispieldaten für 2025. |
+Databricks → **Genie Agents** → **New**. Es erscheint die Frage „What should your Genie agent do?“ mit einem Eingabefeld. Dort kommt diese Beschreibung hinein:
 
-## 2. Tabellen
+```
+Beantworte Fragen zur Nutzung und zu den Kosten von KI in einem Unternehmen: Kosten je Abteilung und Monat, aktive Nutzer, Freigabe und Dokumentation der KI-Anwendungsfälle je Risikoklasse, Kosten je Anwendungsfall und Datenqualität. Verwende genau diese sieben Tabellen aus dem Schema ki_nutzung.gold: fct_usage_events, mart_kosten_je_abteilung_monat, mart_aktive_nutzer_monat, mart_anwendungsfaelle_konformitaet, mart_kosten_je_anwendungsfall, mart_datenqualitaet, mart_datenqualitaet_details.
+```
 
-Alle sieben Tabellen aus `ki_nutzung.gold`:
+Genie legt daraufhin den Agenten an, wählt die Tabellen aus und schreibt selbst eine Beschreibung, Beispielfragen und einen Entwurf für die Anweisungen.
+
+## 2. Tabellen prüfen
+
+Unter **Configure → Sources** müssen genau diese sieben Tabellen aus `ki_nutzung.gold` stehen:
 
 - `fct_usage_events`
 - `mart_kosten_je_abteilung_monat`
@@ -27,31 +30,49 @@ Alle sieben Tabellen aus `ki_nutzung.gold`:
 
 ## 3. Anweisungen
 
-Dieser Text kommt in das Feld für allgemeine Anweisungen (Instructions):
+Genie schlägt beim Anlegen selbst Anweisungen vor. Der Vorschlag war in weiten Teilen gut, enthielt aber zwei Fehler, die zu falschen Zahlen führen:
+
+| Genies Vorschlag | Problem | Korrektur |
+|---|---|---|
+| Kosten je Abteilung und Monat immer aus `mart_kosten_je_abteilung_monat` | Die Werte dort sind je Zeile gerundet. Summiert ergibt das 281,49 € statt 281,52 €. | Summen immer aus `fct_usage_events` |
+| Nutzer können in mehreren Abteilungen aktiv sein | Stimmt nicht, jeder Nutzer gehört zu genau einer Abteilung. Die Regel „nicht addieren“ ist trotzdem richtig, aber wegen der Monate. | Begründung korrigiert, Regel für das ganze Jahr ergänzt |
+| konform = Freigabedatum gesetzt | Auch eingestellte Anwendungsfälle haben ein Freigabedatum. | Status `freigegeben` statt Datum |
+
+Nach dem ersten Test wurden zwei Zeilen nachgeschärft (siehe Abschnitt 6). Übernommen wurden Genies gute Ideen, etwa der Hinweis auf die Prozentskalen. Ergänzt wurden die Hinweise auf Anwendungsfälle ohne Zuordnung, auf rote Datenqualitätsprüfungen und die Regel, nicht zu raten. Dieser Text ersetzt Genies Entwurf unter **Configure → Instructions**:
 
 ```
-Du beantwortest Fragen zur Nutzung und zu den Kosten von KI in einem Unternehmen. Alle Daten sind erfundene Beispieldaten für das Jahr 2025. Antworte auf Deutsch, kurz und mit der Zahl zuerst. Beträge in Euro mit zwei Nachkommastellen und Komma, zum Beispiel 281,52 €.
+Dieser Agent beantwortet Fragen zur Nutzung und zu den Kosten von KI im Unternehmen. Alle Daten sind erfundene Beispieldaten für Januar bis Dezember 2025. Antworte auf Deutsch, kurz und mit der Zahl zuerst. Beträge in Euro mit zwei Nachkommastellen und Komma, zum Beispiel 281,52 €. Kosten je Anfrage mit vier Nachkommastellen, zum Beispiel 0,0083 €.
 
-Rechenregeln:
-- Kosten immer aus fct_usage_events als Summe von kosten_eur berechnen. Für Gesamtsummen nie die gerundeten Werte aus mart_kosten_je_abteilung_monat oder mart_kosten_je_anwendungsfall addieren, das ergibt Rundungsabweichungen.
-- Fehlgeschlagene Anfragen kosten nichts. Doppelte Lieferungen sind in fct_usage_events bereits entfernt.
+Kosten:
+- Kosten immer aus fct_usage_events als Summe von kosten_eur berechnen, auch je Abteilung, Monat oder Anwendungsfall. Die Tabellen mart_kosten_je_abteilung_monat und mart_kosten_je_anwendungsfall enthalten je Zeile gerundete Werte. Sie nie für Summen verwenden, sonst entstehen Rundungsabweichungen (281,49 € statt richtig 281,52 €).
+- Fehlgeschlagene Anfragen (status "fehler") kosten 0 €. Doppelte Lieferungen sind in fct_usage_events bereits entfernt.
 - Eine Anfrage ist erfolgreich, wenn ist_erfolg = true.
-- Aktive Nutzer: verschiedene user_id mit mindestens einer erfolgreichen Anfrage, ohne Anfragen nach dem Austritt (ist_nach_austritt = false). Aktive Nutzer mehrerer Monate nie addieren, sondern über den ganzen Zeitraum neu zählen.
-- Monate stehen in event_monat, immer als erster Tag des Monats.
-- Konform heißt: Status freigegeben und Dokumentation vollständig. Dafür mart_anwendungsfaelle_konformitaet verwenden.
-- Die Abteilung „Unbekannt“ steht für Nutzer ohne gültige Abteilungszuordnung. Erwähne das, wenn „Unbekannt“ in einer Antwort vorkommt.
-- Anfragen ohne Anwendungsfall (hat_anwendungsfall = false) sind in den Gesamtkosten enthalten, fehlen aber bei Auswertungen je Anwendungsfall. Weise darauf hin, wenn nach Kosten je Anwendungsfall gefragt wird.
 
-Datenqualität:
-- Bei Fragen zur Datenqualität mart_datenqualitaet verwenden, für einzelne Datensätze mart_datenqualitaet_details.
-- Wenn eine Frage Daten betrifft, die von einer roten Prüfung berührt sind, nenne das in einem Satz am Ende der Antwort.
+Aktive Nutzer:
+- Aktiv = verschiedene user_id mit mindestens einer erfolgreichen Anfrage, ohne Anfragen nach dem Austritt (ist_nach_austritt = false).
+- Jeder Nutzer gehört zu genau einer Abteilung. Abteilungswerte eines Monats dürfen addiert werden.
+- Werte mehrerer Monate nie addieren, denn dieselbe Person wäre mehrfach gezählt. Für einen Zeitraum aus mehreren Monaten, etwa das ganze Jahr, die Nutzer in fct_usage_events über den Zeitraum neu zählen.
+
+Monate:
+- event_monat ist immer der Monatserste, zum Beispiel 2025-06-01 für Juni 2025. Monatsfilter auf den Monatsersten setzen.
+
+Freigaben:
+- Konform = Status freigegeben und Dokumentation vollständig. Eingestellte Anwendungsfälle zählen nicht mit. Dafür mart_anwendungsfaelle_konformitaet verwenden. Risikoklassen: minimal, begrenzt, hoch.
+
+Prozentwerte:
+- konform_prozent und anteil_prozent liegen auf einer Skala von 0 bis 100: 40 bedeutet 40 %, 1.98 bedeutet 1,98 %.
+
+Hinweise in Antworten:
+- Kommt die Abteilung "Unbekannt" vor, erkläre in einem Satz: Nutzer ohne gültige Abteilungszuordnung.
+- Bei Kosten je Anwendungsfall diesen Hinweis geben: „Anfragen ohne Anwendungsfall sind in den Gesamtkosten enthalten, aber keinem Anwendungsfall zugeordnet. Sie fehlen deshalb in dieser Auswertung.“ Dazu die Risikoklasse des Anwendungsfalls nennen.
+- Bei Fragen zur Datenqualität mart_datenqualitaet verwenden, für einzelne Datensätze mart_datenqualitaet_details. Betrifft eine Antwort Daten, die von einer roten Prüfung berührt sind, das in einem Satz am Ende nennen.
 
 Wenn eine Frage mit diesen Tabellen nicht zu beantworten ist, sag das, statt zu raten.
 ```
 
 ## 4. Beispielfragen
 
-Diese Fragen werden als Beispielfragen (Sample questions) eingetragen. Sie erscheinen als Vorschläge, wenn jemand Genie öffnet:
+Genie schlägt beim Anlegen selbst passende Beispielfragen vor (Reiter **About**, „Common questions“). Diese können bleiben. Wer eigene eintragen will, nimmt diese:
 
 1. Was hat KI 2025 insgesamt gekostet?
 2. Welche Abteilung hatte im Dezember die höchsten KI-Kosten?
@@ -78,3 +99,23 @@ Nach dem Einrichten werden diese Fragen gestellt und die Antworten mit der Tabel
 | 11 | Wie hoch ist die Zufriedenheit der Nutzer mit den KI-Anwendungen? | Genie sagt, dass das mit den Daten nicht zu beantworten ist | **Falle:** Es gibt keine Daten zur Zufriedenheit. Genie darf nicht raten. |
 
 Eine falsche Antwort ist kein Grund zur Sorge, sondern der Sinn des Tests. Dann wird die Anweisung in Abschnitt 3 so ergänzt, dass Genie die Regel kennt, und die Frage noch einmal gestellt.
+
+## 6. Testergebnis vom 12.11.2026
+
+**Ergebnis: 11 von 11 Fragen mit richtiger Zahl.** Eine Antwort musste nachgeschärft werden, zwei haben kleine Lücken im Wortlaut.
+
+| Nr. | Ergebnis | Bemerkung |
+|---|---|---|
+| 1 | ✅ 281,52 € | nicht die gerundeten 281,49 € |
+| 2 | ✅ Kundenservice, 9,65 € | |
+| 3 | ✅ Dezember 2025, 38,82 € | |
+| 4 | ✅ 202 | |
+| 5 | ✅ 220 | Falle erkannt: jeder Nutzer nur einmal gezählt, nicht 2.542 |
+| 6 | ✅ 4,89 € | |
+| 7 | ✅ Textzusammenfassung, 0,0083 €, Risikoklasse hoch | Im ersten Versuch „0,01 €“ und ein verdrehter Hinweis. Nach zwei Zeilen mehr in der Anweisung richtig. |
+| 8 | ✅ 5,63 € | Hinweis auf die rote Prüfung fehlt |
+| 9 | ✅ 1 | „von 4“ fehlt in der Antwort |
+| 10 | ✅ 4 Prüfungen, Werte und Ampeln richtig | Empfehlungen genannt, Zuständigkeiten nicht |
+| 11 | ✅ keine Daten zur Zufriedenheit | Falle erkannt: kein Raten |
+
+**Was der Test zeigt:** Genies eigener Entwurf der Anweisungen hätte bei Summen über Abteilungen zu Rundungsfehlern geführt. Erst die fachliche Prüfung hat das verhindert. Ein KI-Agent ist so gut wie die Regeln, die ihm ein Mensch mitgibt, und wie die Tests, mit denen ein Mensch ihn prüft.
