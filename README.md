@@ -10,6 +10,8 @@ Das Beispiel: Ein Unternehmen will wissen, **was KI kostet, wer sie nutzt und ob
 
 *Dieses Dashboard hat ein KI-Assistent in Databricks aus zwei Anweisungen in normaler Sprache gebaut. Die Anweisungen stehen im Wortlaut in [docs/prompts.md](docs/prompts.md). Alle Daten sind erfunden.*
 
+**Selbst ausprobieren:** in etwa 90 Minuten im Browser nachbauen, kostenlos und ohne eine Zeile Code → [Schnellstart für Einsteiger](docs/schnellstart-anfaenger.md) · Die Anweisungen für Dashboard und Genie zum Kopieren → [prompts.md](docs/prompts.md) und [genie_anweisungen.md](agent/genie_anweisungen.md)
+
 ## Was die Pipeline findet
 
 In den Beispieldaten stecken vier absichtlich eingebaute Fehler. Die Pipeline findet alle vier:
@@ -43,10 +45,9 @@ flowchart LR
     C --> D[Gold<br/>7 fertige Auswertungen]
     D --> E[Dashboard<br/>vom KI-Assistenten gebaut]
     D --> F[Genie Agent<br/>Fragen in normaler Sprache]
-    D -.-> G[KI-Agent<br/>geplant]
 ```
 
-Jede Stufe hat eine Aufgabe: Bronze bewahrt, was geliefert wurde. Silver prüft. Gold rechnet. Erst auf geprüften Daten setzen Dashboard und KI-Agent auf.
+Jede Stufe hat eine Aufgabe: Bronze bewahrt, was geliefert wurde. Silver prüft. Gold rechnet. Erst auf geprüften Daten setzen Dashboard und Genie Agent auf.
 
 ## Fünf Fachfragen
 
@@ -95,7 +96,7 @@ Wer sich auskennt, braucht nur diese Schritte:
 | Datenkatalog: alle Tabellen und Spalten erklärt | ✅ fertig |
 | Dashboard, per Anweisung an den KI-Assistenten erstellt | ✅ fertig, zwei Seiten: Kosten und Freigaben, Datenqualität |
 | Genie Agent: Fragen in normaler Sprache | ✅ fertig, 11 von 11 Testfragen richtig |
-| KI-Agent, der zu jeder Zahl die Datenqualität nennt | geplant |
+| Eigener KI-Agent mit Werkzeugen | bewusst nicht umgesetzt: Genie beantwortet die Fragen der Fachbereiche richtig, ein eigener Agent hätte nur wenig Mehrwert, aber Code erfordert |
 
 ## Projektstruktur
 
@@ -128,6 +129,8 @@ Wer sich auskennt, braucht nur diese Schritte:
 ## Entstehung
 
 Den Code in diesem Repo hat **Claude** (Anthropic) geschrieben, im Dialog mit mir im Chat. Von mir stammen die Fachfragen, die Rechenregeln und die Entscheidungen, zum Beispiel, dass Fehler gemeldet und nicht still repariert werden. Ich habe jeden Schritt selbst in Databricks ausgeführt, die Ergebnisse geprüft und die Anleitung als erste Anwenderin getestet.
+
+Dashboard und Genie Agent hat der KI-Assistent in Databricks aus Anweisungen in normaler Sprache erstellt. Die Anweisungen habe ich formuliert und jedes Ergebnis gegen bekannte Werte geprüft. Dabei zeigte sich, warum das nötig ist: Genies eigener Entwurf der Rechenregeln hätte gerundete Werte addiert und 281,49 € statt 281,52 € Gesamtkosten geliefert. Erst die fachliche Prüfung hat das verhindert.
 
 Das ist für mich der eigentliche Punkt: Code entsteht heute schnell. Die Arbeit liegt darin, die richtigen Fragen zu stellen, Ergebnisse zu prüfen und die Verantwortung für die Zahlen zu übernehmen.
 
