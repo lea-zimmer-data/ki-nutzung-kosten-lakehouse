@@ -42,7 +42,8 @@ flowchart LR
     B --> C[Silver<br/>Datentypen<br/>+ 13 Prüfregeln]
     C --> D[Gold<br/>7 fertige Auswertungen]
     D --> E[Dashboard<br/>vom KI-Assistenten gebaut]
-    D -.-> F[Genie und KI-Agent<br/>geplant]
+    D --> F[Genie Agent<br/>Fragen in normaler Sprache]
+    D -.-> G[KI-Agent<br/>geplant]
 ```
 
 Jede Stufe hat eine Aufgabe: Bronze bewahrt, was geliefert wurde. Silver prüft. Gold rechnet. Erst auf geprüften Daten setzen Dashboard und KI-Agent auf.
@@ -71,7 +72,7 @@ Der Gedanke dahinter: Die Plattform ist austauschbar. Was bleibt, sind die Fachf
 
 Du brauchst einen Browser und eine E-Mail-Adresse. Es wird nichts installiert, und die Databricks Free Edition ist kostenlos.
 
-**[Schnellstart für absolute Anfänger](docs/schnellstart-anfaenger.md)**: in etwa 60 bis 75 Minuten vom leeren Konto bis zum fertigen Dashboard, ohne eine Zeile Code zu schreiben. Jeder Schritt nennt, was du danach sehen solltest, und was zu tun ist, wenn etwas nicht klappt.
+**[Schnellstart für absolute Anfänger](docs/schnellstart-anfaenger.md)**: in etwa 90 Minuten vom leeren Konto bis zum Genie Agent, der Fragen in normaler Sprache beantwortet, ohne eine Zeile Code zu schreiben. Jeder Schritt nennt, was du danach sehen solltest, und was zu tun ist, wenn etwas nicht klappt.
 
 Wer sich auskennt, braucht nur diese Schritte:
 
@@ -81,6 +82,7 @@ Wer sich auskennt, braucht nur diese Schritte:
 4. ETL-Pipeline anlegen, Quellcode auf den Ordner `pipeline/` zeigen lassen, starten
 5. Abfragen im Ordner `auswertungen/` ausführen
 6. Dashboard mit den Anweisungen aus `docs/prompts.md` vom KI-Assistenten bauen lassen
+7. Genie Agent nach `agent/genie_anweisungen.md` anlegen und mit den Testfragen prüfen
 
 ## Stand des Projekts
 
@@ -92,7 +94,7 @@ Wer sich auskennt, braucht nur diese Schritte:
 | Vergleich der Ergebnisse mit dem Snowflake-Projekt | ✅ fertig, 21 von 21 Kennzahlen gleich |
 | Datenkatalog: alle Tabellen und Spalten erklärt | ✅ fertig |
 | Dashboard, per Anweisung an den KI-Assistenten erstellt | ✅ fertig, zwei Seiten: Kosten und Freigaben, Datenqualität |
-| Genie Agent: Fragen in normaler Sprache | geplant |
+| Genie Agent: Fragen in normaler Sprache | ✅ fertig, 11 von 11 Testfragen richtig |
 | KI-Agent, der zu jeder Zahl die Datenqualität nennt | geplant |
 
 ## Projektstruktur
@@ -107,6 +109,8 @@ Wer sich auskennt, braucht nur diese Schritte:
 │   ├── 01_bronze.sql                   # Rohdaten unverändert einlesen
 │   ├── 02_silver.sql                   # Datentypen und Prüfregeln
 │   └── 03_gold.sql                     # Auswertungen und Qualitätsübersicht
+├── agent/
+│   └── genie_anweisungen.md            # Genie Agent: Beschreibung, Anweisungen, Testfragen
 ├── auswertungen/
 │   ├── kosten_je_abteilung.sql         # Frage 1
 │   ├── datenqualitaet.sql              # Frage 5
