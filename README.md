@@ -49,6 +49,8 @@ Was das praktisch bedeutet, zeigt die Kostenauswertung: Die Kosten der fünf Nut
 | 4. Welche Anwendungsfälle kosten je Anfrage am meisten? | `mart_kosten_je_anwendungsfall` |
 | 5. Wo liegen Datenqualitätsprobleme? | `mart_datenqualitaet` und `mart_datenqualitaet_details` |
 
+Was jede Tabelle und jede Spalte bedeutet und welche Rechenregel dahintersteht, erklärt der [Datenkatalog](docs/datenkatalog.md).
+
 ## Gleiche Fragen, andere Plattform
 
 Dieselben Daten und dieselben fünf Fragen habe ich zuvor mit Snowflake und dbt umgesetzt: [ki-nutzung-kosten-analytics](https://github.com/lea-zimmer-data/ki-nutzung-kosten-analytics). Der Datengenerator ist in beiden Projekten dieselbe Datei, die Tabellen heißen gleich, die Rechenregeln sind dieselben.
@@ -79,6 +81,8 @@ Wer sich auskennt, braucht nur diese Schritte:
 | Pipeline Bronze → Silver → Gold mit Prüfregeln | ✅ fertig |
 | Anleitung für Einsteiger | ✅ fertig, wächst mit |
 | Vergleich der Ergebnisse mit dem Snowflake-Projekt | ✅ fertig, 21 von 21 Kennzahlen gleich |
+| Datenkatalog: alle Tabellen und Spalten erklärt | ✅ fertig |
+| Dashboard, per Anweisung an den KI-Assistenten erstellt | in Arbeit |
 | Genie Agent: Fragen in normaler Sprache | geplant |
 | KI-Agent, der zu jeder Zahl die Datenqualität nennt | geplant |
 
@@ -102,6 +106,8 @@ Wer sich auskennt, braucht nur diese Schritte:
 │   └── abgleich_snowflake.sql          # dieselbe Abfrage für Snowflake
 └── docs/
     ├── schnellstart-anfaenger.md       # Schritt-für-Schritt-Anleitung
+    ├── datenkatalog.md                 # alle Tabellen und Spalten erklärt
+    ├── prompts.md                      # Anweisungen an die KI-Assistenten im Wortlaut
     └── vergleich-snowflake-databricks.md   # Ergebnisse beider Plattformen nebeneinander
 ```
 
