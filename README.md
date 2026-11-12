@@ -1,5 +1,7 @@
 # Verlässliche Daten für KI-Agenten
 
+*Ein Projekt von **Lea Zimmer** · BI-Transformation und Data Governance · [LinkedIn](https://www.linkedin.com/in/leazimmer/)*
+
 **Ein KI-Agent beantwortet jede Frage. Auch dann, wenn die Daten darunter falsch sind.**
 
 Dieses Projekt zeigt an einem durchgängigen Beispiel, wie man das verhindert: mit einer Datenstrecke, die Fehler findet, offen meldet und einem Menschen die Entscheidung überlässt. Gebaut im Databricks Lakehouse, komplett im Browser, mit frei erfundenen Beispieldaten.
@@ -8,7 +10,13 @@ Das Beispiel: Ein Unternehmen will wissen, **was KI kostet, wer sie nutzt und ob
 
 ![Dashboard „KI-Nutzung und -Kosten“: Kosten, erfolgreiche Anfragen, Konformität je Risikoklasse](docs/dashboard.png)
 
-*Dieses Dashboard hat ein KI-Assistent in Databricks aus zwei Anweisungen in normaler Sprache gebaut. Die Anweisungen stehen im Wortlaut in [docs/prompts.md](docs/prompts.md). Alle Daten sind erfunden.*
+*Dieses Dashboard hat ein KI-Assistent in Databricks aus zwei Anweisungen in normaler Sprache gebaut. Die Anweisungen stehen im Wortlaut in [docs/prompts.md](docs/prompts.md). Alle Daten sind erfunden, deshalb sind auch die Beträge klein. Es geht um den Weg zur Zahl.*
+
+## Das Wichtigste in drei Punkten
+
+1. **Fehler werden gemeldet, nicht versteckt.** Die Pipeline findet vier eingebaute Datenfehler und zeigt sie mit Ampel und Zuständigkeit, statt die Zeilen still auszusortieren.
+2. **Dashboard und Frage-Werkzeug ohne Code.** Das Dashboard und der Genie Agent, das Werkzeug von Databricks für Fragen in normaler Sprache, sind aus Anweisungen entstanden, die man im Repo nachlesen und kopieren kann.
+3. **Die KI liefert schnell, der Mensch prüft.** Genies eigener Entwurf der Rechenregeln hätte gerundete Werte addiert und falsche Gesamtkosten geliefert: 281,49 € statt 281,52 €. Gefunden hat das erst die fachliche Prüfung gegen bekannte Werte.
 
 **Selbst ausprobieren:** in etwa 90 Minuten im Browser nachbauen, kostenlos und ohne eine Zeile Code → [Schnellstart für Einsteiger](docs/schnellstart-anfaenger.md) · Die Anweisungen für Dashboard und Genie zum Kopieren → [prompts.md](docs/prompts.md) und [genie_anweisungen.md](agent/genie_anweisungen.md)
 
@@ -69,13 +77,9 @@ Ich habe beide Ergebnisse nebeneinandergelegt: **21 Kennzahlen über alle sieben
 
 Der Gedanke dahinter: Die Plattform ist austauschbar. Was bleibt, sind die Fachfragen, die Rechenregeln und die Entscheidung, wie man mit Fehlern umgeht.
 
-## Selbst ausprobieren
+## Kurzanleitung für Fachleute
 
-Du brauchst einen Browser und eine E-Mail-Adresse. Es wird nichts installiert, und die Databricks Free Edition ist kostenlos.
-
-**[Schnellstart für absolute Anfänger](docs/schnellstart-anfaenger.md)**: in etwa 90 Minuten vom leeren Konto bis zum Genie Agent, der Fragen in normaler Sprache beantwortet, ohne eine Zeile Code zu schreiben. Jeder Schritt nennt, was du danach sehen solltest, und was zu tun ist, wenn etwas nicht klappt.
-
-Wer sich auskennt, braucht nur diese Schritte:
+Die ausführliche Anleitung mit allen Klicks steht im [Schnellstart für Einsteiger](docs/schnellstart-anfaenger.md). Wer Databricks kennt, braucht nur diese Schritte:
 
 1. Repo als Git-Ordner in Databricks holen
 2. `setup/00_einrichtung.sql` ausführen (Katalog, Schemas, Ablage)
