@@ -3,7 +3,7 @@
 Diese Anleitung ist für Menschen **ohne technische Vorkenntnisse**: Betriebswirtinnen, Controller, Assistenten der Geschäftsführung, Fachbereiche. Stell dir vor, dein Chef fragt: *„Was kostet uns eigentlich die KI, und können wir den Zahlen trauen?“* Mit dieser Anleitung baust du die Antwort selbst nach, Schritt für Schritt und komplett im Browser.
 
 **Was du brauchst:** einen Browser und eine E-Mail-Adresse. Du installierst nichts auf deinem Rechner, und es kostet nichts.
-**Zeitbedarf:** beim ersten Mal etwa 45 bis 60 Minuten. Du kannst nach jedem Teil aufhören und später weitermachen.
+**Zeitbedarf:** beim ersten Mal etwa 90 Minuten. Du kannst nach jedem Teil aufhören und später weitermachen.
 
 > **Wichtig:** Das Projekt arbeitet mit **erfundenen Beispieldaten**. Damit kannst du gefahrlos üben. Die Databricks Free Edition ist zum Lernen gedacht und darf nicht für kommerzielle Zwecke genutzt werden. Bevor du echte Unternehmensdaten verwendest, sprich mit deiner IT und dem Datenschutz.
 
@@ -16,6 +16,8 @@ Nach dieser Anleitung läuft in deinem eigenen Databricks-Konto eine vollständi
 - **Rund 56.000 KI-Anfragen** eines erfundenen Unternehmens aus einem Jahr, mit Abteilungen, Nutzern, Anwendungsfällen und Preisen.
 - **Eine Pipeline**, die diese Daten mit einem Klick einliest, prüft und auswertet.
 - **Eine Antwort auf die Frage deines Chefs:** eine Tabelle mit den KI-Kosten je Abteilung.
+- **Ein Dashboard mit zwei Seiten**, das ein KI-Assistent aus zwei kurzen Anweisungen baut: eine Seite zu Kosten und Freigaben, eine zur Datenqualität.
+- **Einen Genie Agent**, dem du Fragen in normaler Sprache stellst, zum Beispiel „Was hat der Vertrieb im Oktober für KI ausgegeben?“.
 - **Eine ehrliche Qualitätsübersicht:** In den Daten stecken vier absichtlich eingebaute Fehler. Die Pipeline findet alle vier und zeigt mit einer Ampel, wie schwer sie wiegen und wer sich darum kümmern sollte.
 
 Du schreibst dabei keine einzige Zeile Code. Du klickst, führst fertige Dateien aus und vergleichst das Ergebnis mit dem, was hier unter **„Das solltest du sehen“** steht.
@@ -217,10 +219,122 @@ Die Beträge sind klein, weil Preise und Mengen erfunden sind. Es geht um den We
 
 ---
 
+## Teil 8: Ein Dashboard per Anweisung (ca. 15 Minuten)
+
+Jetzt lässt du einen KI-Assistenten ein Dashboard bauen. Du beschreibst in normaler Sprache, was du sehen willst, und der Assistent erstellt Kennzahlen, Diagramme und Tabellen. Programmieren musst du dafür nicht, und auch kein Diagramm von Hand anlegen.
+
+Die beiden Anweisungen stehen fertig in [docs/prompts.md](prompts.md). Du kopierst sie nur.
+
+### Schritt 1: Leeres Dashboard anlegen
+
+1. Klicke links im Menü unter **SQL** auf **Dashboards**.
+2. Klicke oben rechts auf **Create dashboard**.
+
+**Das solltest du sehen:** eine leere Seite mit der Überschrift **„Create a dashboard with Genie“** und darunter ein Eingabefeld. Das ist der KI-Assistent.
+
+### Schritt 2: Seite 1 „KI-Kosten und Freigaben“
+
+1. Öffne im Git-Ordner die Datei **docs/prompts.md** und kopiere den Text unter **Anweisung 1**.
+2. Füge ihn in das Eingabefeld ein und klicke auf den **Pfeil** rechts.
+3. Warte, bis der Assistent fertig ist. Das kann ein bis zwei Minuten dauern.
+
+**Das solltest du sehen:**
+
+- Oben drei Kennzahlen: **281,52 €** KI-Kosten gesamt, **54.098** erfolgreiche Anfragen und **1 von 4** Hochrisiko-Anwendungsfällen konform.
+- Darunter drei Diagramme: Die Kosten je Monat steigen von rund 12 € im Januar auf knapp 39 € im Dezember. Bei den Kosten je Abteilung liegt Kundenservice vorn, „Unbekannt“ ist grau. Bei der Konformität stehen minimal 100 %, begrenzt 40 % und hoch 25 %.
+- Ganz unten eine Fußnote zum Datenstand.
+
+### Schritt 3: Seite 2 „Datenqualität“
+
+1. Klicke oben neben dem Seitennamen **KI-Kosten und Freigaben** auf das **+**. Eine neue, leere Seite mit dem Assistenten erscheint.
+2. Kopiere aus **docs/prompts.md** den Text unter **Anweisung 2**, füge ihn ein und klicke auf den **Pfeil**.
+
+**Das solltest du sehen:** oben eine Tabelle mit vier Prüfungen und farbiger Ampel, darunter alle 1.420 betroffenen Datensätze mit einem Filter nach Prüfung.
+
+| Prüfung | Betroffen | Anteil | Ampel |
+|---|---|---|---|
+| Nutzer mit unbekannter Abteilung | 5 | 2,27 % | rot |
+| Ereignisse ohne Anwendungsfall | 1.102 | 1,98 % | rot |
+| Nutzung nach dem Austritt | 174 | 0,31 % | gelb |
+| Doppelte Ereignisse | 139 | 0,25 % | gelb |
+
+### Schritt 4: Fertigstellen
+
+1. Klicke oben auf den Namen des Dashboards. Databricks hängt dort Datum und Uhrzeit an. Ändere ihn in **KI-Nutzung und -Kosten**.
+2. Klicke oben rechts auf **Publish**. Damit wird aus dem Entwurf eine feste Fassung.
+
+> **Warum zwei Seiten?** Wer Kosten steuert, braucht andere Informationen als jemand, der Stammdaten pflegt. Seite 1 ist für Geschäftsführung und Controlling, Seite 2 für die Verantwortlichen der Daten. Die Fußnote auf Seite 1 verbindet beide: Sie erklärt „Unbekannt“ und verweist auf die Details.
+
+> **Gut zu wissen:** Ein KI-Assistent liefert bei derselben Anweisung nicht jedes Mal genau dasselbe Aussehen. Farben, Anordnung oder Beschriftungen können abweichen. Die Zahlen müssen aber stimmen, denn sie kommen immer aus denselben geprüften Gold-Tabellen. Vergleiche sie mit den Werten oben.
+
+### Falls etwas nicht klappt
+
+| Meldung oder Problem | Lösung |
+|---|---|
+| Eine Zahl weicht von den Werten oben ab | Klicke im Dashboard auf das betroffene Element und öffne seine Abfrage. Vergleiche sie mit der Rechenregel im [Datenkatalog](datenkatalog.md). Oder schreibe dem Assistenten, was falsch ist, zum Beispiel: „Die Kosten gesamt sollen aus fct_usage_events kommen, nicht aus mart_kosten_je_abteilung_monat.“ |
+| Der Assistent fragt nach, welche Tabelle gemeint ist | Antworte mit dem vollen Namen, zum Beispiel `ki_nutzung.gold.fct_usage_events`. |
+| Etwas sieht anders aus als gewünscht, etwa eine Farbe oder eine Überschrift | Schreibe dem Assistenten die Änderung in einem Satz, zum Beispiel: „Färbe den Balken Unbekannt grau.“ |
+| Die Tabellen in `ki_nutzung.gold` fehlen | Die Pipeline aus Teil 6 ist noch nicht gelaufen. |
+
+---
+
+## Teil 9: Fragen in normaler Sprache mit Genie (ca. 20 Minuten)
+
+Jetzt richtest du einen Genie Agent ein. Er beantwortet Fragen in normaler Sprache, etwa „Wie viele aktive Nutzer gab es im Dezember?“, und zeigt die Abfrage, mit der er gerechnet hat. Alles, was du dafür einträgst, steht fertig in [agent/genie_anweisungen.md](../agent/genie_anweisungen.md).
+
+### Schritt 1: Agent per Beschreibung anlegen
+
+1. Klicke links im Menü unter **SQL** auf **Genie Agents** und oben rechts auf **New**.
+2. Es erscheint die Frage **„What should your Genie agent do?“** mit einem Eingabefeld.
+3. Kopiere die Beschreibung aus Abschnitt 1 der Datei `agent/genie_anweisungen.md`, füge sie ein und klicke auf den **Pfeil**.
+
+**Das solltest du sehen:** Genie legt den Agenten an. Unter **Configure → About** stehen eine Beschreibung und Beispielfragen („Common questions“), die Genie selbst formuliert hat.
+
+### Schritt 2: Tabellen prüfen
+
+Klicke auf **Configure** und dann auf den Reiter **Sources**.
+
+**Das solltest du sehen:** genau sieben Tabellen, alle aus `ki_nutzung.gold`, von `fct_usage_events` bis `mart_datenqualitaet_details`.
+
+### Schritt 3: Anweisungen ersetzen
+
+1. Klicke auf den Reiter **Instructions**. Dort steht ein Entwurf, den Genie selbst geschrieben hat.
+2. Lösche ihn und füge stattdessen den Text aus Abschnitt 3 der Datei `agent/genie_anweisungen.md` ein. Speichern.
+
+> **Warum ersetzen?** Genies Entwurf ist gut, enthält aber zwei Fehler. Er würde zum Beispiel gerundete Monatswerte addieren und käme dann auf 281,49 € statt 281,52 € Gesamtkosten. In der Datei steht genau, was geändert wurde und warum. Das ist der wichtigste Schritt dieses Teils: Die KI schreibt schnell einen Entwurf, die fachliche Prüfung macht ihn verlässlich.
+
+### Schritt 4: Testen
+
+Klicke oben auf **Chat** und stelle die elf Testfragen aus Abschnitt 5 der Datei, eine nach der anderen. Vergleiche jede Antwort mit der richtigen Antwort in der Tabelle.
+
+**Das solltest du sehen**, zum Beispiel:
+
+| Frage | Richtige Antwort |
+|---|---|
+| Was hat KI 2025 insgesamt gekostet? | 281,52 € |
+| Wie viele aktive Nutzer gab es im ganzen Jahr 2025? | 220, nicht 2.542 |
+| Welcher Anwendungsfall kostet je erfolgreicher Anfrage am meisten? | Textzusammenfassung, 0,0083 €, mit Hinweis auf Anfragen ohne Anwendungsfall |
+| Wie hoch ist die Zufriedenheit der Nutzer mit den KI-Anwendungen? | Genie sagt, dass es dazu keine Daten gibt |
+
+Zwei der Fragen sind absichtlich Fallen. Bei den aktiven Nutzern im ganzen Jahr darf Genie die Monate nicht addieren. Bei der Zufriedenheit darf Genie nicht raten.
+
+> **Gut zu wissen:** Genie formuliert die Antworten jedes Mal etwas anders. Entscheidend ist die Zahl. Unter jeder Antwort kannst du die Abfrage aufklappen, mit der Genie gerechnet hat.
+
+### Falls etwas nicht klappt
+
+| Problem | Lösung |
+|---|---|
+| Unter **Sources** fehlen Tabellen oder es sind andere dabei | Klicke auf **Sources** und füge die fehlenden Tabellen aus `ki_nutzung.gold` hinzu oder entferne die falschen. |
+| Eine Antwort hat die falsche Zahl | Prüfe, ob die Anweisungen aus Abschnitt 3 gespeichert sind. Öffne unter der Antwort die Abfrage und vergleiche sie mit der Rechenregel im [Datenkatalog](datenkatalog.md). |
+| Kosten je Anfrage erscheinen als „0,01 €“ | In den Anweisungen fehlt die Zeile zu vier Nachkommastellen. Ergänze sie aus Abschnitt 3. |
+| Genie antwortet auf Englisch | Schreibe in die Frage „Antworte auf Deutsch“ oder prüfe, ob die Anweisungen gespeichert sind. |
+
+---
+
 ## Wie geht es weiter?
 
 - **Eigene Fragen stellen:** Unter **Catalog → ki_nutzung → gold** findest du alle fertigen Auswertungen. Klicke eine Tabelle an und dann auf **Sample data**, um hineinzuschauen.
-- **Was noch kommt:** ein Genie Agent, dem du Fragen in normaler Sprache stellst, und ein KI-Agent, der bei jeder Antwort die Datenqualität dazusagt. Die Anleitung wird dann erweitert.
+- **Was noch kommt:** ein KI-Agent, der bei jeder Antwort die Datenqualität dazusagt. Die Anleitung wird dann erweitert.
 - **Fragen oder Anregungen?** Lege ein Issue im Repo an oder schreib mir. Den Kontakt findest du im [README](../README.md).
 
 ---
