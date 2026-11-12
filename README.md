@@ -6,6 +6,10 @@ Dieses Projekt zeigt an einem durchgängigen Beispiel, wie man das verhindert: m
 
 Das Beispiel: Ein Unternehmen will wissen, **was KI kostet, wer sie nutzt und ob die Anwendungsfälle sauber freigegeben sind.**
 
+![Dashboard „KI-Nutzung und -Kosten“: Kosten, erfolgreiche Anfragen, Konformität je Risikoklasse](docs/dashboard.png)
+
+*Dieses Dashboard hat ein KI-Assistent in Databricks aus zwei Anweisungen in normaler Sprache gebaut. Die Anweisungen stehen im Wortlaut in [docs/prompts.md](docs/prompts.md). Alle Daten sind erfunden.*
+
 ```mermaid
 flowchart LR
     A[CSV-Dateien<br/>56.000 KI-Anfragen] --> B[Bronze<br/>unverändert eingelesen]
@@ -63,7 +67,7 @@ Der Gedanke dahinter: Die Plattform ist austauschbar. Was bleibt, sind die Fachf
 
 Du brauchst einen Browser und eine E-Mail-Adresse. Es wird nichts installiert, und die Databricks Free Edition ist kostenlos.
 
-**[Schnellstart für absolute Anfänger](docs/schnellstart-anfaenger.md)**: in etwa 45 bis 60 Minuten vom leeren Konto bis zur ersten Auswertung, ohne eine Zeile Code zu schreiben. Jeder Schritt nennt, was du danach sehen solltest, und was zu tun ist, wenn etwas nicht klappt.
+**[Schnellstart für absolute Anfänger](docs/schnellstart-anfaenger.md)**: in etwa 60 bis 75 Minuten vom leeren Konto bis zum fertigen Dashboard, ohne eine Zeile Code zu schreiben. Jeder Schritt nennt, was du danach sehen solltest, und was zu tun ist, wenn etwas nicht klappt.
 
 Wer sich auskennt, braucht nur diese Schritte:
 
@@ -72,6 +76,7 @@ Wer sich auskennt, braucht nur diese Schritte:
 3. `setup/01_daten_erzeugen` ausführen (Beispieldaten)
 4. ETL-Pipeline anlegen, Quellcode auf den Ordner `pipeline/` zeigen lassen, starten
 5. Abfragen im Ordner `auswertungen/` ausführen
+6. Dashboard mit den Anweisungen aus `docs/prompts.md` vom KI-Assistenten bauen lassen
 
 ## Stand des Projekts
 
@@ -82,7 +87,7 @@ Wer sich auskennt, braucht nur diese Schritte:
 | Anleitung für Einsteiger | ✅ fertig, wächst mit |
 | Vergleich der Ergebnisse mit dem Snowflake-Projekt | ✅ fertig, 21 von 21 Kennzahlen gleich |
 | Datenkatalog: alle Tabellen und Spalten erklärt | ✅ fertig |
-| Dashboard, per Anweisung an den KI-Assistenten erstellt | in Arbeit |
+| Dashboard, per Anweisung an den KI-Assistenten erstellt | ✅ fertig, zwei Seiten: Kosten und Freigaben, Datenqualität |
 | Genie Agent: Fragen in normaler Sprache | geplant |
 | KI-Agent, der zu jeder Zahl die Datenqualität nennt | geplant |
 
@@ -108,6 +113,7 @@ Wer sich auskennt, braucht nur diese Schritte:
     ├── schnellstart-anfaenger.md       # Schritt-für-Schritt-Anleitung
     ├── datenkatalog.md                 # alle Tabellen und Spalten erklärt
     ├── prompts.md                      # Anweisungen an die KI-Assistenten im Wortlaut
+    ├── dashboard.png                   # Bild des Dashboards
     └── vergleich-snowflake-databricks.md   # Ergebnisse beider Plattformen nebeneinander
 ```
 
