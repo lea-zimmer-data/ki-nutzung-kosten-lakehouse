@@ -331,14 +331,6 @@ Zwei der Fragen sind absichtlich Fallen. Bei den aktiven Nutzern im ganzen Jahr 
 
 ---
 
-## Wie geht es weiter?
-
-- **Eigene Fragen stellen:** Unter **Catalog → ki_nutzung → gold** findest du alle fertigen Auswertungen. Klicke eine Tabelle an und dann auf **Sample data**, um hineinzuschauen.
-- **Was noch kommt:** ein KI-Agent, der bei jeder Antwort die Datenqualität dazusagt. Die Anleitung wird dann erweitert.
-- **Fragen oder Anregungen?** Lege ein Issue im Repo an oder schreib mir. Den Kontakt findest du im [README](../README.md).
-
----
-
 ## Begriffe zum Nachschlagen
 
 | Begriff | Einfach erklärt |
